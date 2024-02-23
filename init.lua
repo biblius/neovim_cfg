@@ -63,6 +63,9 @@ require('lazy').setup({
     },
   },
 
+  -- When life gets too hard
+  'eandrju/cellular-automaton.nvim',
+
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -309,6 +312,9 @@ require('lazy').setup({
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   -- { import = 'custom.plugins' },
 }, {})
+
+-- When lyf give you lemons
+vim.keymap.set("n", "<leader>fml", "<cmd>CellularAutomaton make_it_rain<CR>")
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
