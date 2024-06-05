@@ -1,4 +1,3 @@
-
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -37,10 +36,10 @@ require('lazy').setup({
   'jose-elias-alvarez/null-ls.nvim',
 
   {
-    "kdheepak/lazygit.nvim",
+    'kdheepak/lazygit.nvim',
     -- optional for floating window border decoration
     dependencies = {
-        "nvim-lua/plenary.nvim",
+      'nvim-lua/plenary.nvim',
     },
   },
 
@@ -54,6 +53,7 @@ require('lazy').setup({
   {
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
+    config = require('kickstart.plugins.autoformat').config,
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
       { 'williamboman/mason.nvim', config = true },
@@ -174,14 +174,14 @@ require('lazy').setup({
   },
 
   {
-    "folke/tokyonight.nvim",
+    'folke/tokyonight.nvim',
     lazy = false,
     priority = 1000,
     config = function()
       require('tokyonight').setup {
-        style = 'night'
+        style = 'night',
       }
-    end
+    end,
   },
 
   {
@@ -197,7 +197,6 @@ require('lazy').setup({
       require('onedark').load()
     end,
   },
-
 
   {
     -- Set lualine as statusline
@@ -222,8 +221,8 @@ require('lazy').setup({
     opts = {
       indent = {
         char = '▏',
-      }
-    }
+      },
+    },
   },
 
   -- "gc" to comment visual regions/lines
@@ -250,6 +249,15 @@ require('lazy').setup({
     },
   },
 
+  'nvim-neotest/nvim-nio',
+
+  {
+    'danymat/neogen',
+    config = true,
+    -- Uncomment next line if you want to follow only stable versions
+    -- version = "*"
+  },
+
   {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -264,7 +272,7 @@ require('lazy').setup({
     ft = 'rust',
     init = function()
       vim.g.rustfmt_autosave = 1
-    end
+    end,
   },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
