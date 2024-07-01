@@ -201,7 +201,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'svelte' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'svelte', 'markdown' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -340,13 +340,16 @@ require('mason').setup()
 require('mason-lspconfig').setup()
 
 -- Enable the following language servers
---  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
+-- Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 --
---  Add any additional override configuration in the following tables. They will be passed to
---  the `settings` field of the server config. You must look up that documentation yourself.
+-- Add any additional override configuration in the following tables. They will be passed to
+-- the `settings` field of the server config. You must look up that documentation yourself.
 --
---  If you want to override the default filetypes that your language server will attach to you can
---  define the property 'filetypes' to the map in question.
+-- If you want to override the default filetypes that your language server will attach to you can
+-- define the property 'filetypes' to the map in question.
+--
+-- Available servers:
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 local servers = {
   -- clangd = {},
   -- gopls = {},
@@ -406,26 +409,22 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
--- Autoformat on save
--- local auLspFormatting = vim.api.nvim_create_augroup("LspFormatting", {})
--- vim.api.nvim_create_autocmd('BufWritePre', {
---   callback = function()
---     vim.lsp.buf.format()
---   end,
---   group = auLspFormatting,
---   pattern = '*',
--- })
-
 local null_ls = require 'null-ls'
 local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
 
 null_ls.setup {
   sources = {
+    -- Lua
     null_ls.builtins.formatting.stylua,
+
+    -- Python
     null_ls.builtins.formatting.black,
-    null_ls.builtins.completion.pyright,
-    -- null_ls.builtins.formatting.rustfmt,
+
+    -- Markdown
     null_ls.builtins.formatting.markdownlint,
+    null_ls.builtins.diagnostics.markdownlint,
+
+    -- Soy
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.diagnostics.eslint,
   },
