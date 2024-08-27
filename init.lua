@@ -29,6 +29,9 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
+-- Oil.nvim
+vim.keymap.set('n', '<leader>-', '<CMD>Oil<CR>', { desc = 'Open parent directory (oil)' })
+
 -- Make window management nice
 vim.api.nvim_set_keymap('n', '<C-Left>', ':vertical resize +3<CR>', { silent = true, noremap = true })
 vim.api.nvim_set_keymap('n', '<C-Right>', ':vertical resize -3<CR>', { silent = true, noremap = true })

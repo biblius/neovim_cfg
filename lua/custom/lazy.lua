@@ -281,6 +281,17 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autoformat',
   require 'kickstart.plugins.debug',
 
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
+    config = function()
+      require('oil').setup { default_file_explorer = true }
+    end,
+  },
+
+  'nvim-tree/nvim-web-devicons',
+
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.
