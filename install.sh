@@ -7,6 +7,7 @@ sudo pacman -S stylua --noconfirm
 sudo pacman -S eslint --noconfirm
 sudo pacman -S prettier --noconfirm
 sudo pacman -S markdownlint --noconfirm
+sudo ln -s /usr/bin/mdl /usr/bin/markdownlint
 sudo pacman -S tree-sitter --noconfirm
 sudo pacman -S go --noconfirm
 sudo pacman -S nodejs --noconfirm
