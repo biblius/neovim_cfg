@@ -33,15 +33,19 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<leader>-', '<CMD>Oil<CR>', { desc = 'Open parent directory (oil)' })
 
 -- Make window management nice
-vim.api.nvim_set_keymap('n', '<C-Left>', ':vertical resize +3<CR>', { silent = true, noremap = true })
-vim.api.nvim_set_keymap('n', '<C-Right>', ':vertical resize -3<CR>', { silent = true, noremap = true })
-vim.api.nvim_set_keymap('n', '<C-Up>', ':resize -3<CR>', { silent = true, noremap = true })
-vim.api.nvim_set_keymap('n', '<C-Down>', ':resize +3<CR>', { silent = true, noremap = true })
+vim.keymap.set('n', '<C-Left>', ':vertical resize +3<CR>', { silent = true, noremap = true })
+vim.keymap.set('n', '<C-Right>', ':vertical resize -3<CR>', { silent = true, noremap = true })
+vim.keymap.set('n', '<C-Up>', ':resize -3<CR>', { silent = true, noremap = true })
+vim.keymap.set('n', '<C-Down>', ':resize +3<CR>', { silent = true, noremap = true })
 
-vim.api.nvim_set_keymap('n', '<C-h>', '<C-w>h', { silent = true, noremap = true })
-vim.api.nvim_set_keymap('n', '<C-j>', '<C-w>j', { silent = true, noremap = true })
-vim.api.nvim_set_keymap('n', '<C-k>', '<C-w>k', { silent = true, noremap = true })
-vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', { silent = true, noremap = true })
+vim.keymap.set('n', '<C-h>', '<C-w>h', { silent = true, noremap = true })
+vim.keymap.set('n', '<C-j>', '<C-w>j', { silent = true, noremap = true })
+vim.keymap.set('n', '<C-k>', '<C-w>k', { silent = true, noremap = true })
+vim.keymap.set('n', '<C-l>', '<C-w>l', { silent = true, noremap = true })
+
+-- Doc comment generation
+vim.api.nvim_set_keymap('n', '<Leader>cd', ":lua require('neogen').generate()<CR>",
+  { noremap = true, silent = true, desc = '[C]ode [D]ocumentation comment' })
 
 -- What you get in abundance when using Nvim
 vim.keymap.set('n', '<leader>f', ':Sex', { silent = true, noremap = true })
@@ -52,9 +56,6 @@ vim.api.nvim_set_keymap('i', '<C-H>', '<C-W>', { noremap = true })
 
 -- Lazygit
 vim.api.nvim_set_keymap('n', '<leader>gg', ':LazyGit<CR>', { noremap = true, silent = true })
-
--- Doc comment generation
-vim.api.nvim_set_keymap('n', '<Leader>cd', ":lua require('neogen').generate()<CR>", { noremap = true, silent = true })
 
 -- When lyf give you lemons
 vim.keymap.set('n', '<leader>fml', '<cmd>CellularAutomaton make_it_rain<CR>')
@@ -324,29 +325,29 @@ require('which-key').add {
 
   -- Suggested Spec:
   {
-    { '<leader>c', group = '[C]ode' },
+    { '<leader>c',  group = '[C]ode' },
     { '<leader>c_', hidden = true },
-    { '<leader>d', group = '[D]ocument' },
+    { '<leader>d',  group = '[D]ocument' },
     { '<leader>d_', hidden = true },
-    { '<leader>g', group = '[G]it' },
+    { '<leader>g',  group = '[G]it' },
     { '<leader>g_', hidden = true },
-    { '<leader>h', group = 'Git [H]unk' },
+    { '<leader>h',  group = 'Git [H]unk' },
     { '<leader>h_', hidden = true },
-    { '<leader>r', group = '[R]ename' },
+    { '<leader>r',  group = '[R]ename' },
     { '<leader>r_', hidden = true },
-    { '<leader>s', group = '[S]earch' },
+    { '<leader>s',  group = '[S]earch' },
     { '<leader>s_', hidden = true },
-    { '<leader>t', group = '[T]oggle' },
+    { '<leader>t',  group = '[T]oggle' },
     { '<leader>t_', hidden = true },
-    { '<leader>w', group = '[W]orkspace' },
+    { '<leader>w',  group = '[W]orkspace' },
     { '<leader>w_', hidden = true },
   },
 }
 -- register which-key VISUAL mode
 -- required for visual <leader>hs (hunk stage) to work
 require('which-key').add {
-  { '<leader>', group = 'VISUAL <leader>', mode = 'v' },
-  { '<leader>h', desc = 'Git [H]unk', mode = 'v' },
+  { '<leader>',  group = 'VISUAL <leader>', mode = 'v' },
+  { '<leader>h', desc = 'Git [H]unk',       mode = 'v' },
 }
 
 -- mason-lspconfig requires that these setup functions are called in this order
