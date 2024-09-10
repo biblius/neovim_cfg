@@ -30,7 +30,7 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- Oil.nvim
-vim.keymap.set('n', '<leader>-', '<CMD>Oil<CR>', { desc = 'Open parent directory (oil)' })
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory (oil)' })
 
 -- Make window management nice
 vim.keymap.set('n', '<C-Left>', ':vertical resize +3<CR>', { silent = true, noremap = true })
@@ -49,6 +49,27 @@ vim.api.nvim_set_keymap('n', '<Leader>cd', ":lua require('neogen').generate()<CR
 
 -- What you get in abundance when using Nvim
 vim.keymap.set('n', '<leader>f', ':Sex', { silent = true, noremap = true })
+
+-- Closes all buffers except current one,
+-- %bd = delete all buffers.
+-- e# = open the last buffer for editing (current buffer).
+-- bd# deletes [No Name] buffer that gets created when you use %bd.
+-- '" = keep my cursor position.
+vim.keymap.set('n', '<leader>br', ':%bd|e#|bd#<CR>',
+  { desc = '[B]uffer [R]eset (close all except current)', silent = true, noremap = true })
+
+-- Neotree
+vim.keymap.set('n', '<leader>bs', ':Neotree toggle show buffers right<CR>',
+  { desc = '[B]uffer [S]how in Neotree', silent = true, noremap = true })
+
+vim.keymap.set('n', 'gd', ':Neotree float reveal_file=<cfile> reveal_force_cwd<CR>',
+  { desc = '[G]oto [D]efinition in Neotree', silent = true, noremap = true })
+
+vim.keymap.set('n', '<leader>n', ':Neotree toggle left reveal_force_cwd<CR>', {
+  desc = '[N]eotree toggle in current directory',
+  silent = true,
+  noremap = true,
+})
 
 -- Sets CTRL+Backspace to delete previous word
 -- C-H is what the terminal sends when Ctrl+Backspace is pressed
