@@ -15,6 +15,14 @@ vim.wo.relativenumber = true
 
 -- [[ Basic Keymaps ]]
 
+-- Selects the word under the cursor and inserts it into the global
+-- substitution command
+vim.keymap.set('n', '<leader>ra', function()
+  -- Get the word under the cursor
+  local word = vim.fn.expand '<cword>'
+  vim.api.nvim_input(':%s/' .. word .. '//g<LEFT><LEFT>')
+end, { noremap = true, silent = true, desc = 'Select word and [R]eplace [A]ll occurrences in buffer' })
+
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
@@ -44,7 +52,7 @@ vim.keymap.set('n', '<C-k>', '<C-w>k', { silent = true, noremap = true })
 vim.keymap.set('n', '<C-l>', '<C-w>l', { silent = true, noremap = true })
 
 -- Doc comment generation
-vim.api.nvim_set_keymap('n', '<Leader>cd', ":lua require('neogen').generate()<CR>",
+vim.keymap.set('n', '<Leader>cd', ":lua require('neogen').generate()<CR>",
   { noremap = true, silent = true, desc = '[C]ode [D]ocumentation comment' })
 
 -- What you get in abundance when using Nvim
@@ -73,10 +81,10 @@ vim.keymap.set('n', '<leader>n', ':Neotree toggle left reveal_force_cwd<CR>', {
 
 -- Sets CTRL+Backspace to delete previous word
 -- C-H is what the terminal sends when Ctrl+Backspace is pressed
-vim.api.nvim_set_keymap('i', '<C-H>', '<C-W>', { noremap = true })
+vim.keymap.set('i', '<C-H>', '<C-W>', { noremap = true })
 
 -- Lazygit
-vim.api.nvim_set_keymap('n', '<leader>gg', ':LazyGit<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>gg', ':LazyGit<CR>', { noremap = true, silent = true })
 
 -- When lyf give you lemons
 vim.keymap.set('n', '<leader>fml', '<cmd>CellularAutomaton make_it_rain<CR>')

@@ -61,7 +61,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -97,7 +97,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -300,7 +300,7 @@ require('lazy').setup({
       vim.g.netrw_nogx = 1 -- disable netrw gx
     end,
     dependencies = { 'nvim-lua/plenary.nvim' },
-    config = true,      -- default settings
+    config = true, -- default settings
     submodules = false, -- not needed, submodules are required only for tests
   },
 
@@ -323,6 +323,15 @@ require('lazy').setup({
     config = function()
       require('window-picker').setup()
     end,
+  },
+
+  -- Markdown preview
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
   },
 
   -- Personal chat bro, use CodeiumAuth or something like that to login
