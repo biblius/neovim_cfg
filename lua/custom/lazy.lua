@@ -32,15 +32,19 @@ require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
-  -- Autoformat on save
-  'jose-elias-alvarez/null-ls.nvim',
-
   {
     'kdheepak/lazygit.nvim',
     -- optional for floating window border decoration
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
+  },
+
+  -- Formatter
+  {
+    -- https://github.com/stevearc/conform.nvim
+    'stevearc/conform.nvim',
+    opts = {},
   },
 
   -- When life gets too hard
@@ -61,10 +65,43 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
+      'folke/lazydev.nvim',
+    },
+  },
+
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    opts = {},
+    config = function()
+      require('typescript-tools').setup {
+        filetypes = {
+          'javascript',
+          'typescript',
+          'vue',
+        },
+        settings = {
+          single_file_support = false,
+          tsserver_plugins = {
+            '@vue/typescript-plugin',
+          },
+        },
+      }
+    end,
+  },
+
+  {
+    'folke/lazydev.nvim',
+    ft = 'lua', -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      },
     },
   },
 
@@ -97,7 +134,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -300,7 +337,7 @@ require('lazy').setup({
       vim.g.netrw_nogx = 1 -- disable netrw gx
     end,
     dependencies = { 'nvim-lua/plenary.nvim' },
-    config = true, -- default settings
+    config = true,      -- default settings
     submodules = false, -- not needed, submodules are required only for tests
   },
 

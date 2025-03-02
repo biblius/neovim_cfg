@@ -1,7 +1,18 @@
 # Install all the components necessary for this config
 # on an arch linux
 
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# Check if rustc is installed
+if ! command -v rustc &> /dev/null; then
+    echo "rustc not found. Installing Rust..."
+    # Install Rust using rustup
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    # Add Rust to the current shell session
+    source "$HOME/.cargo/env"
+    echo "Rust installed successfully."
+else
+    echo "rustc is already installed: $(rustc --version)"
+fi
+
 sudo pacman -S python-black --noconfirm
 sudo pacman -S stylua --noconfirm
 sudo pacman -S eslint --noconfirm

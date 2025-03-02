@@ -37,8 +37,16 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
+-- Codeium
+vim.keymap.set('i', '<Tab>', function()
+  return vim.fn['codeium#Accept']() or '  '
+end, { expr = true, silent = true })
+
 -- Oil.nvim
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory (oil)' })
+
+-- Dadbod
+vim.keymap.set('n', '<leader>db', '<CMD>DBUI<CR>', { desc = 'Open [D]ad[B]od UI' })
 
 -- Make window management nice
 vim.keymap.set('n', '<C-Left>', ':vertical resize +3<CR>', { silent = true, noremap = true })
@@ -302,7 +310,47 @@ vim.defer_fn(function()
   }
 end, 0)
 
+-- [[ Configure which-key ]]
+
+require('which-key').add {
+  -- Suggested Spec:
+  {
+    { '<leader>c',  group = '[C]ode' },
+    { '<leader>c_', hidden = true },
+    { '<leader>d',  group = '[D]ocument' },
+    { '<leader>d_', hidden = true },
+    { '<leader>g',  group = '[G]it' },
+    { '<leader>g_', hidden = true },
+    { '<leader>h',  group = 'Git [H]unk' },
+    { '<leader>h_', hidden = true },
+    { '<leader>r',  group = '[R]ename' },
+    { '<leader>r_', hidden = true },
+    { '<leader>s',  group = '[S]earch' },
+    { '<leader>s_', hidden = true },
+    { '<leader>t',  group = '[T]oggle' },
+    { '<leader>t_', hidden = true },
+    { '<leader>w',  group = '[W]orkspace' },
+    { '<leader>w_', hidden = true },
+  },
+}
+-- register which-key VISUAL mode
+-- required for visual <leader>hs (hunk stage) to work
+require('which-key').add {
+  { '<leader>',  group = 'VISUAL <leader>', mode = 'v' },
+  { '<leader>h', desc = 'Git [H]unk',       mode = 'v' },
+}
+
 -- [[ Configure LSP ]]
+
+local format_group = vim.api.nvim_create_augroup('LspFormatting', {})
+vim.api.nvim_create_autocmd('BufWritePre', {
+  group = format_group,
+  pattern = '*',
+  callback = function()
+    vim.lsp.buf.format()
+  end,
+})
+
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
@@ -349,35 +397,7 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
--- document existing key chains
-require('which-key').add {
-
-  -- Suggested Spec:
-  {
-    { '<leader>c',  group = '[C]ode' },
-    { '<leader>c_', hidden = true },
-    { '<leader>d',  group = '[D]ocument' },
-    { '<leader>d_', hidden = true },
-    { '<leader>g',  group = '[G]it' },
-    { '<leader>g_', hidden = true },
-    { '<leader>h',  group = 'Git [H]unk' },
-    { '<leader>h_', hidden = true },
-    { '<leader>r',  group = '[R]ename' },
-    { '<leader>r_', hidden = true },
-    { '<leader>s',  group = '[S]earch' },
-    { '<leader>s_', hidden = true },
-    { '<leader>t',  group = '[T]oggle' },
-    { '<leader>t_', hidden = true },
-    { '<leader>w',  group = '[W]orkspace' },
-    { '<leader>w_', hidden = true },
-  },
-}
--- register which-key VISUAL mode
--- required for visual <leader>hs (hunk stage) to work
-require('which-key').add {
-  { '<leader>',  group = 'VISUAL <leader>', mode = 'v' },
-  { '<leader>h', desc = 'Git [H]unk',       mode = 'v' },
-}
+-- LSP Setup
 
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
@@ -399,6 +419,7 @@ local servers = {
   -- clangd = {},
   -- gopls = {},
   pyright = {},
+
   rust_analyzer = {
     ['rust-analyzer'] = {
       checkOnSave = true,
@@ -410,8 +431,6 @@ local servers = {
     },
     filetypes = { 'rust' },
   },
-  -- tsserver = {},
-  -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
   lua_ls = {
     Lua = {
@@ -422,15 +441,17 @@ local servers = {
     },
   },
 
-  svelte = {
-    filetypes = {
-      'svelte',
-    },
-  },
-}
+  marksman = {},
 
--- Setup neovim lua configuration
-require('neodev').setup()
+  -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#svelte
+  svelte = {},
+
+  -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#ts_ls
+  -- Typescript Language Server is handled by typescript-tools
+  -- ts_ls = {}
+
+  html = { filetypes = { 'html', 'twig', 'hbs' } },
+}
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -454,35 +475,17 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
-local null_ls = require 'null-ls'
-local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
-
-null_ls.setup {
-  sources = {
-    -- Lua
-    null_ls.builtins.formatting.stylua,
-
-    -- Python
-    null_ls.builtins.formatting.black,
-
-    -- Markdown
-    null_ls.builtins.formatting.markdownlint,
-    null_ls.builtins.diagnostics.markdownlint,
-
-    -- Soy
-    null_ls.builtins.formatting.prettier,
-    null_ls.builtins.diagnostics.eslint,
+-- Setup conform.nvim for formatters
+require('conform').setup {
+  formatters_by_ft = {
+    lua = { 'stylua' },
+    python = { 'black' },
+    markdown = { 'markdownlint' },
+    javascript = { 'prettier' },
+    typescript = { 'prettier' },
+    vue = { 'prettier' },
+    svelte = { 'prettier' },
+    html = { 'prettier' },
   },
-  on_attach = function(client, bufnr)
-    if client.supports_method 'textDocument/formatting' then
-      vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        group = augroup,
-        buffer = bufnr,
-        callback = function()
-          vim.lsp.buf.format()
-        end,
-      })
-    end
-  end,
+  format_on_save = { timeout_ms = 500, lsp_fallback = true },
 }
