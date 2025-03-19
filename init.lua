@@ -352,7 +352,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 })
 
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -369,7 +369,12 @@ local on_attach = function(_, bufnr)
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', function()
-    vim.lsp.buf.code_action { context = { only = { 'quickfix', 'refactor', 'source' } } }
+    vim.lsp.buf.code_action {
+      context = {
+        only = { 'quickfix', 'refactor', 'source' },
+        diagnostics = {},
+      },
+    }
   end, '[C]ode [A]ction')
 
   nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
@@ -391,6 +396,12 @@ local on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
+  -- Disable ts_ls formatting to favor eslint_d
+  if client.name == 'ts_ls' then
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end
+
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
@@ -402,7 +413,6 @@ end
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
 require('mason').setup()
-require('mason-lspconfig').setup()
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -441,6 +451,8 @@ local servers = {
     },
   },
 
+  eslint = {},
+
   marksman = {},
 
   -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#svelte
@@ -448,7 +460,7 @@ local servers = {
 
   -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#ts_ls
   -- Typescript Language Server is handled by typescript-tools
-  -- ts_ls = {}
+  ts_ls = { format_on_save = false },
 
   html = { filetypes = { 'html', 'twig', 'hbs' } },
 }
@@ -480,12 +492,60 @@ require('conform').setup {
   formatters_by_ft = {
     lua = { 'stylua' },
     python = { 'black' },
-    markdown = { 'markdownlint' },
-    javascript = { 'prettier' },
-    typescript = { 'prettier' },
-    vue = { 'prettier' },
-    svelte = { 'prettier' },
-    html = { 'prettier' },
+    markdown = { 'prettierd' },
+    javascript = { 'eslint_d' },
+    typescript = { 'eslint_d' },
+    vue = { 'eslint_d' },
+    svelte = { 'eslint_d' },
+    html = { 'eslint_d' },
   },
   format_on_save = { timeout_ms = 500, lsp_fallback = true },
+}
+
+-- antfu eslint setup
+
+local customizations = {
+  { rule = 'style/*',   severity = 'off', fixable = true },
+  { rule = 'format/*',  severity = 'off', fixable = true },
+  { rule = '*-indent',  severity = 'off', fixable = true },
+  { rule = '*-spacing', severity = 'off', fixable = true },
+  { rule = '*-spaces',  severity = 'off', fixable = true },
+  { rule = '*-order',   severity = 'off', fixable = true },
+  { rule = '*-dangle',  severity = 'off', fixable = true },
+  { rule = '*-newline', severity = 'off', fixable = true },
+  { rule = '*quotes',   severity = 'off', fixable = true },
+  { rule = '*semi',     severity = 'off', fixable = true },
+}
+
+local lspconfig = require 'lspconfig'
+-- Enable eslint for all supported languages
+lspconfig.eslint.setup {
+  filetypes = {
+    'javascript',
+    'javascriptreact',
+    'javascript.jsx',
+    'typescript',
+    'typescriptreact',
+    'typescript.tsx',
+    'vue',
+    'html',
+    'json',
+    'jsonc',
+    'yaml',
+    'toml',
+    'xml',
+    'gql',
+    'graphql',
+    'astro',
+    'svelte',
+    'css',
+    'less',
+    'scss',
+    'pcss',
+    'postcss',
+  },
+  settings = {
+    -- Silent the stylistic rules in you IDE, but still auto fix them
+    rulesCustomizations = customizations,
+  },
 }
