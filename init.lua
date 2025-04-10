@@ -138,6 +138,9 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+vim.o.softtabstop = 2
+vim.o.shiftwidth = 2
+
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -342,14 +345,13 @@ require('which-key').add {
 
 -- [[ Configure LSP ]]
 
-local format_group = vim.api.nvim_create_augroup('LspFormatting', {})
-vim.api.nvim_create_autocmd('BufWritePre', {
-  group = format_group,
-  pattern = '*',
-  callback = function()
-    vim.lsp.buf.format()
-  end,
-})
+-- local format_group = vim.api.nvim_create_augroup('LspFormatting', {})
+-- vim.api.nvim_create_autocmd('BufWritePre', {
+--   pattern = '*.rs',
+--   callback = function(args)
+--     require('conform').format { bufnr = args.buf }
+--   end,
+-- })
 
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(client, bufnr)
@@ -396,16 +398,10 @@ local on_attach = function(client, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
-  -- Disable ts_ls formatting to favor eslint_d
-  if client.name == 'ts_ls' then
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-  end
-
   -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
+  -- vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+  --   require('conform').format { bufnr = bufnr }
+  -- end, { desc = 'Format current buffer with LSP' })
 end
 
 -- LSP Setup
@@ -451,8 +447,6 @@ local servers = {
     },
   },
 
-  eslint = {},
-
   marksman = {},
 
   -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#svelte
@@ -460,7 +454,7 @@ local servers = {
 
   -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#ts_ls
   -- Typescript Language Server is handled by typescript-tools
-  ts_ls = { format_on_save = false },
+  ts_ls = {},
 
   html = { filetypes = { 'html', 'twig', 'hbs' } },
 }
@@ -474,6 +468,7 @@ local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
+  automatic_installation = true,
 }
 
 mason_lspconfig.setup_handlers {
@@ -485,67 +480,4 @@ mason_lspconfig.setup_handlers {
       filetypes = (servers[server_name] or {}).filetypes,
     }
   end,
-}
-
--- Setup conform.nvim for formatters
-require('conform').setup {
-  formatters_by_ft = {
-    lua = { 'stylua' },
-    python = { 'black' },
-    markdown = { 'prettierd' },
-    javascript = { 'eslint_d' },
-    typescript = { 'eslint_d' },
-    vue = { 'eslint_d' },
-    svelte = { 'eslint_d' },
-    html = { 'eslint_d' },
-  },
-  format_on_save = { timeout_ms = 500, lsp_fallback = true },
-}
-
--- antfu eslint setup
-
-local customizations = {
-  { rule = 'style/*',   severity = 'off', fixable = true },
-  { rule = 'format/*',  severity = 'off', fixable = true },
-  { rule = '*-indent',  severity = 'off', fixable = true },
-  { rule = '*-spacing', severity = 'off', fixable = true },
-  { rule = '*-spaces',  severity = 'off', fixable = true },
-  { rule = '*-order',   severity = 'off', fixable = true },
-  { rule = '*-dangle',  severity = 'off', fixable = true },
-  { rule = '*-newline', severity = 'off', fixable = true },
-  { rule = '*quotes',   severity = 'off', fixable = true },
-  { rule = '*semi',     severity = 'off', fixable = true },
-}
-
-local lspconfig = require 'lspconfig'
--- Enable eslint for all supported languages
-lspconfig.eslint.setup {
-  filetypes = {
-    'javascript',
-    'javascriptreact',
-    'javascript.jsx',
-    'typescript',
-    'typescriptreact',
-    'typescript.tsx',
-    'vue',
-    'html',
-    'json',
-    'jsonc',
-    'yaml',
-    'toml',
-    'xml',
-    'gql',
-    'graphql',
-    'astro',
-    'svelte',
-    'css',
-    'less',
-    'scss',
-    'pcss',
-    'postcss',
-  },
-  settings = {
-    -- Silent the stylistic rules in you IDE, but still auto fix them
-    rulesCustomizations = customizations,
-  },
 }

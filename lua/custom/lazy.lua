@@ -41,11 +41,7 @@ require('lazy').setup({
   },
 
   -- Formatter
-  {
-    -- https://github.com/stevearc/conform.nvim
-    'stevearc/conform.nvim',
-    opts = {},
-  },
+  require 'custom.conform',
 
   -- When life gets too hard
   'eandrju/cellular-automaton.nvim',
@@ -196,6 +192,28 @@ require('lazy').setup({
     config = function()
       require('tokyonight').setup {
         style = 'night',
+      }
+    end,
+  },
+
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    opts = {},
+    config = function()
+      require('typescript-tools').setup {
+        handlers = {
+          ['textDocument/formatting'] = function() end,
+          ['textDocument/rangeFormatting'] = function() end,
+        },
+        filetypes = {
+          'vue',
+        },
+        settings = {
+          tsserver_plugins = {
+            '@vue/typescript-plugin',
+          },
+        },
       }
     end,
   },
