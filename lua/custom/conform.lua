@@ -9,7 +9,7 @@ return {
   opts = {
     -- Define your formatters
     formatters_by_ft = {
-      rust = { 'rustfmt' },
+      -- rust = { 'rustfmt' },
       lua = { 'stylua' },
       python = { 'black' },
       json = { 'prettierd' },

@@ -46,7 +46,7 @@ end, { expr = true, silent = true })
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory (oil)' })
 
 -- Dadbod
-vim.keymap.set('n', '<leader>db', '<CMD>DBUI<CR>', { desc = 'Open [D]ad[B]od UI' })
+vim.keymap.set('n', '<leader>db', '<CMD> tabnew | DBUI <CR>', { desc = 'Open [D]ad[B]od UI' })
 
 -- Make window management nice
 vim.keymap.set('n', '<C-Left>', ':vertical resize +3<CR>', { silent = true, noremap = true })
@@ -60,8 +60,7 @@ vim.keymap.set('n', '<C-k>', '<C-w>k', { silent = true, noremap = true })
 vim.keymap.set('n', '<C-l>', '<C-w>l', { silent = true, noremap = true })
 
 -- Doc comment generation
-vim.keymap.set('n', '<Leader>cd', ":lua require('neogen').generate()<CR>",
-  { noremap = true, silent = true, desc = '[C]ode [D]ocumentation comment' })
+vim.keymap.set('n', '<Leader>cd', ":lua require('neogen').generate()<CR>", { noremap = true, silent = true, desc = '[C]ode [D]ocumentation comment' })
 
 -- What you get in abundance when using Nvim
 vim.keymap.set('n', '<leader>f', ':Sex', { silent = true, noremap = true })
@@ -71,15 +70,12 @@ vim.keymap.set('n', '<leader>f', ':Sex', { silent = true, noremap = true })
 -- e# = open the last buffer for editing (current buffer).
 -- bd# deletes [No Name] buffer that gets created when you use %bd.
 -- '" = keep my cursor position.
-vim.keymap.set('n', '<leader>br', ':%bd|e#|bd#<CR>',
-  { desc = '[B]uffer [R]eset (close all except current)', silent = true, noremap = true })
+vim.keymap.set('n', '<leader>br', ':%bd|e#|bd#<CR>', { desc = '[B]uffer [R]eset (close all except current)', silent = true, noremap = true })
 
 -- Neotree
-vim.keymap.set('n', '<leader>bs', ':Neotree toggle show buffers right<CR>',
-  { desc = '[B]uffer [S]how in Neotree', silent = true, noremap = true })
+vim.keymap.set('n', '<leader>bs', ':Neotree toggle show buffers right<CR>', { desc = '[B]uffer [S]how in Neotree', silent = true, noremap = true })
 
-vim.keymap.set('n', 'gd', ':Neotree float reveal_file=<cfile> reveal_force_cwd<CR>',
-  { desc = '[G]oto [D]efinition in Neotree', silent = true, noremap = true })
+vim.keymap.set('n', 'gd', ':Neotree float reveal_file=<cfile> reveal_force_cwd<CR>', { desc = '[G]oto [D]efinition in Neotree', silent = true, noremap = true })
 
 vim.keymap.set('n', '<leader>n', ':Neotree toggle left reveal_force_cwd<CR>', {
   desc = '[N]eotree toggle in current directory',
@@ -318,29 +314,29 @@ end, 0)
 require('which-key').add {
   -- Suggested Spec:
   {
-    { '<leader>c',  group = '[C]ode' },
+    { '<leader>c', group = '[C]ode' },
     { '<leader>c_', hidden = true },
-    { '<leader>d',  group = '[D]ocument' },
+    { '<leader>d', group = '[D]ocument' },
     { '<leader>d_', hidden = true },
-    { '<leader>g',  group = '[G]it' },
+    { '<leader>g', group = '[G]it' },
     { '<leader>g_', hidden = true },
-    { '<leader>h',  group = 'Git [H]unk' },
+    { '<leader>h', group = 'Git [H]unk' },
     { '<leader>h_', hidden = true },
-    { '<leader>r',  group = '[R]ename' },
+    { '<leader>r', group = '[R]ename' },
     { '<leader>r_', hidden = true },
-    { '<leader>s',  group = '[S]earch' },
+    { '<leader>s', group = '[S]earch' },
     { '<leader>s_', hidden = true },
-    { '<leader>t',  group = '[T]oggle' },
+    { '<leader>t', group = '[T]oggle' },
     { '<leader>t_', hidden = true },
-    { '<leader>w',  group = '[W]orkspace' },
+    { '<leader>w', group = '[W]orkspace' },
     { '<leader>w_', hidden = true },
   },
 }
 -- register which-key VISUAL mode
 -- required for visual <leader>hs (hunk stage) to work
 require('which-key').add {
-  { '<leader>',  group = 'VISUAL <leader>', mode = 'v' },
-  { '<leader>h', desc = 'Git [H]unk',       mode = 'v' },
+  { '<leader>', group = 'VISUAL <leader>', mode = 'v' },
+  { '<leader>h', desc = 'Git [H]unk', mode = 'v' },
 }
 
 -- [[ Configure LSP ]]
@@ -432,7 +428,7 @@ local servers = {
       check = {
         enable = true,
         command = 'clippy',
-        features = 'all',
+        -- features = 'all',
       },
     },
     filetypes = { 'rust' },

@@ -37,11 +37,10 @@ return {
       callback = function(args)
         local client_id = args.data.client_id
         local client = vim.lsp.get_client_by_id(client_id)
-        local bufnr = args.buf
 
         require('conform').setup {
           formatters_by_ft = {
-            rust = { 'rustfmt' },
+            -- rust = { 'rustfmt' },
             lua = { 'stylua' },
             python = { 'black' },
             json = { 'prettierd' },
@@ -52,6 +51,7 @@ return {
             javascript = { 'prettierd', 'prettier' },
             typescript = { 'prettierd', 'prettier' },
             yaml = { 'yamlfmt' },
+            toml = { 'taplo' },
           },
           format_on_save = {
             -- These options will be passed to conform.format()
