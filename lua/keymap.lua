@@ -46,6 +46,10 @@ vim.keymap.set('n', '<C-j>', '<C-w>j', { silent = true, noremap = true })
 vim.keymap.set('n', '<C-k>', '<C-w>k', { silent = true, noremap = true })
 vim.keymap.set('n', '<C-l>', '<C-w>l', { silent = true, noremap = true })
 
+-- In-buffer horizontal scrolling with Ctrl+Shift+L/R
+vim.keymap.set('n', '<C-S-Right>', 'z30l', { silent = true, noremap = true })
+vim.keymap.set('n', '<C-S-Left>', 'z30h', { silent = true, noremap = true })
+
 -- Doc comment generation
 vim.keymap.set('n', '<Leader>cd', ":lua require('neogen').generate()<CR>", { noremap = true, silent = true, desc = '[C]ode [D]ocumentation comment' })
 
