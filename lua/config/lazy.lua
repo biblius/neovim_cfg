@@ -192,7 +192,7 @@ require('lazy').setup({
   },
 
   -- Personal chat bro, use CodeiumAuth or something like that to login
-  'Exafunction/codeium.vim',
+  -- 'Exafunction/codeium.vim',
 
   -- Databases
   'tpope/vim-dadbod',
