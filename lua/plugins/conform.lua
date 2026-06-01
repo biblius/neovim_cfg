@@ -25,6 +25,7 @@ return {
         javascript = { 'prettierd', 'prettier' },
         typescript = { 'prettierd', 'prettier' },
         yaml = { 'yamlfmt' },
+        sql = { 'sql_formatter' },
       },
       -- Set default options
       default_format_opts = {

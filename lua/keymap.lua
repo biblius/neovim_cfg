@@ -11,6 +11,8 @@ vim.keymap.set('n', '<leader>ra', function()
   vim.api.nvim_input(':%s/' .. word .. '//g<LEFT><LEFT>')
 end, { noremap = true, silent = true, desc = 'Select word and [R]eplace [A]ll occurrences in buffer' })
 
+vim.keymap.set('n', '<C-a>', 'ggVG', { noremap = true })
+
 -- Sets CTRL+Backspace to delete previous word
 -- C-H is what the terminal sends when Ctrl+Backspace is pressed
 vim.keymap.set('i', '<C-H>', '<C-W>', { noremap = true })
@@ -22,11 +24,6 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- Diagnostics
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
-
--- -- Codeium
--- vim.keymap.set('i', '<Tab>', function()
---   return vim.fn['codeium#Accept']() or '  '
--- end, { expr = true, silent = true })
 
 -- Oil
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory (oil)' })

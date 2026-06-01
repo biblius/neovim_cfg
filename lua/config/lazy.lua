@@ -131,7 +131,11 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+{ 'nvim-mini/mini.comment', version = false, 
+  config = function()
+    require("mini.comment").setup()
+  end,
+},
 
   'nvim-neotest/nvim-nio',
 
@@ -190,9 +194,6 @@ require('lazy').setup({
     ---@type render.md.UserConfig
     opts = {},
   },
-
-  -- Personal chat bro, use CodeiumAuth or something like that to login
-  -- 'Exafunction/codeium.vim',
 
   -- Databases
   'tpope/vim-dadbod',
