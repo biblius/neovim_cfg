@@ -35,6 +35,7 @@ return {
       local priority_map = {
         [types.lsp.CompletionItemKind.EnumMember] = 1,
         [types.lsp.CompletionItemKind.Variable] = 2,
+        [types.lsp.CompletionItemKind.Snippet] = 99,
         [types.lsp.CompletionItemKind.Text] = 100,
       }
 
