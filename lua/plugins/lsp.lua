@@ -62,6 +62,8 @@ local servers = {
   vue_ls = {},
 
   html = { filetypes = { 'html', 'twig', 'hbs' } },
+
+  tailwindcss = { filetypes = { 'svelte', 'html', 'javascript', 'typescript' } },
 }
 
 return {
