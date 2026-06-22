@@ -16,6 +16,7 @@ require 'config.lazy'
 -- Initialise keymaps
 require 'keymap'
 
+-- Configure treesitter to run when opening a file of interest
 vim.api.nvim_create_autocmd('FileType', {
   pattern = {
     'c',
@@ -34,6 +35,8 @@ vim.api.nvim_create_autocmd('FileType', {
     'vue',
     'xml',
     'json',
+    'html_tags',
+    'html',
   },
   callback = function()
     vim.treesitter.start()

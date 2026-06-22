@@ -131,11 +131,13 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-{ 'nvim-mini/mini.comment', version = false, 
-  config = function()
-    require("mini.comment").setup()
-  end,
-},
+  {
+    'nvim-mini/mini.comment',
+    version = false,
+    config = function()
+      require('mini.comment').setup()
+    end,
+  },
 
   'nvim-neotest/nvim-nio',
 
