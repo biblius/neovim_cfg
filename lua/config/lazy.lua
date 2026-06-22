@@ -25,6 +25,9 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   { import = 'plugins' },
 
+  -- Multicontext file (vue, svelte) comments
+  'JoosepAlviste/nvim-ts-context-commentstring',
+
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
